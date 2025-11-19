@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { getCategories, getBudgets, createOrUpdateBudget } from '../../services/api';
+import { getCategories, getBudgets, createOrUpdateBudget, deleteBudget } from '../../services/api';
 import MonthSelector from '../Dashboard/MonthSelector';
 import toast from 'react-hot-toast';
 
 const Budgets = () => {
   const [categories, setCategories] = useState([]);
   const [budgets, setBudgets] = useState({});
+  const [budgetIds, setBudgetIds] = useState({});
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
@@ -25,10 +26,13 @@ const Budgets = () => {
       setCategories(categoriesRes.data);
 
       const budgetMap = {};
+      const budgetIdsMap = {};
       budgetsRes.data.forEach(budget => {
         budgetMap[budget.categoryId._id] = budget.amount;
+        budgetIdsMap[budget.categoryId._id] = budget._id;
       });
       setBudgets(budgetMap);
+      setBudgetIds(budgetIdsMap);
     } catch (error) {
       toast.error('Failed to load data');
     }
@@ -63,6 +67,25 @@ const Budgets = () => {
       fetchData();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to save budget');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (categoryId) => {
+    const budgetId = budgetIds[categoryId];
+    if (!budgetId) {
+      toast.error('No budget to delete for this category');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await deleteBudget(budgetId);
+      toast.success('Budget deleted successfully');
+      fetchData();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete budget');
     } finally {
       setLoading(false);
     }
@@ -132,6 +155,15 @@ const Budgets = () => {
                       >
                         Save
                       </button>
+                      {budgetIds[category._id] && (
+                        <button
+                          onClick={() => handleDelete(category._id)}
+                          disabled={loading}
+                          className="px-3 py-2 border border-red-500 text-red-500 rounded-lg hover:bg-red-50 disabled:opacity-50"
+                        >
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
