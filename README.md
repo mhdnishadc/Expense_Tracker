@@ -13,7 +13,7 @@ A full-stack MERN application that helps users track spending, manage budgets, a
 
 ## 🔗 Live Demo
 
-- **Frontend**: https://expense-tracker-phi-wheat.vercel.app/login
+- **Frontend**: https://expense-tracker-phi-wheat.vercel.app/
 - **Backend API**: https://expense-tracker-7bsb.onrender.com/
 
 
