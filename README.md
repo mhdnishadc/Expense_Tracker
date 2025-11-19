@@ -11,6 +11,11 @@ A full-stack MERN application that helps users track spending, manage budgets, a
 - **Monthly Reports**: View spending vs budget comparisons
 - **Responsive Design**: Mobile-friendly interface with bottom navigation
 
+## 🔗 Live Demo
+
+- **Frontend**: https://expense-tracker-phi-wheat.vercel.app/login
+- **Backend API**: https://expense-tracker-7bsb.onrender.com/
+
 
 ## 🛠️ Tech Stack
 
